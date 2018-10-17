@@ -47,11 +47,9 @@
     - `databasename`: Database name,
     - `collectionname`: Collection name,
     - `url`: MongoDB connection string,
-    - `port`: port where `koop.server` can be instructed to listen
 
- 1. File `server.js`:
 
-    Koop exposes an Express server at koop.server which can be instructed to listen on port 80
+ 1. Koop exposes an Express server at koop.server which can be instructed to  listen on port 80
 
     ```js
     var koop = require('koop')(config);

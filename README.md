@@ -1,62 +1,44 @@
+# koop-provider-mongodb
 
+This provider accesses a collection of json documents in MongoDB,
+
+
+This provider makes it possible to access a collection of json documents in MongoDB as either GeoJSON or an Esri FeatureService. This is particular useful for making maps and doing analysis on the web.
 This is provider was created from the [koop-provider-sample](https://github.com/koopjs/koop-provider-sample) that demonstrates how to build a Koop Provider.
 
-## Prerrequisites:
+## Required:
 - [node.js](https://nodejs.org/es/)
 - [mongoDB](https://docs.mongodb.com/manual/installation/)
-- [**ngrok**](https://ngrok.com/): allows you to expose a web server running on your local machine to the internet. Just tell ngrok what port your web server is listening on.
-
-## Files
-
-| File | | Description |
-| --- | --- | --- |
-| `index.js` | Mandatory | Configures provider for usage by Koop |
-| `model.js` | Mandatory | Translates remote API to GeoJSON |
-| `routes.js` | Optional | Specifies additional routes to be handled by this provider |
-| `controller.js` | Optional | Handles additional routes specified in `routes.js` |
-| `server.js` | Optional | Reference implementation for the provider |
-| `test/model-test.js` | Optional | tests the `getData` function on the model |
-| `test/fixtures/input.json` | Optional | a sample of the raw input from the 3rd party API |
-| `config/default.json` | Optional | used for advanced configuration, usually API keys. |
 
 
+## Getting started
 
-## Getting Started
-The data source in this case is the DGT cameras.
-
-http://localhost:8080/mongodb/:id/FeatureServer
-1. Expose a local web server to the internet:
- 1.  ngrok console UI
- ```sh
- $ ngrok http 8080
+1. Create the `field.js` that will start a Koop instance and register the mondodb-provider.
+This `field.js` contains:
+ ```js
+ var koop = require('koop')(config);
+ const FeatureServer = require('koop-output-geoservices')
+ const Provider = require('koop-provider-mongodb')
+ 
+ koop.register(Provider);
+ koop.register(FeatureServer);
+ 
+ koop.server.listen(80);
  ```
+1. Open `config/default.json` with any configurable parameters
+1. Open `model.js` and configure `:id` parameter into `getData function` to call the provider and return GeoJSON.
+1. Open `mongo.js` and specifies the fields to return in the documents that match the query filter into `query function`.
+1. Install dependencies `npm install`.
+1. Run a local server `npm start`.
 
- 1. Select https://
- ![ngrok](images/ngrok.png)
+## Usage
 
-1. In ArcGIS Online:
-   1. Log in
-   1. Content > Add Item > From The Web
+By default, Koop will start listening on http://localhost:8080.
 
-    ![login_agol](images/login_agol.png)
+You can issue a request by using:
 
-   1. Select **ArcGIS Server web service** and introduce the **url** of the service.
-   The **url** will be, the random url from ngrok plus service name from koop provider.
+```sh
+$ curl http://localhost:8080/mongodb/:id/FeatureServer0/query
+```
 
-    ![add_item](images/add_item.png)
-
-    Add title and tags
-    1. Check: Open in Map Viewer
-
-
-
-
-
-
-
-
-
-## Resources
-- https://koopjs.github.io/
-- https://dashboard.ngrok.com/get-started/
-- https://mongodb.github.io/node-mongodb-native/
+Any query-parameters added to the request URL can accessed within getData and leveraged for data fetching purposes.
