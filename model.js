@@ -1,0 +1,48 @@
+// mongo = {
+//   connect :
+//   query :  returns a promise
+// }
+
+const mongo = require('./mongo.js');
+const config = require('config');
+
+
+
+/**
+ * Model constructor
+ */
+function Model() {}
+
+/**
+ * Fetch data from source.  Pass result or error to callback.
+ * This is the only public function you need to implement on Model
+ * @param {object} express request object
+ * @param {function} callback
+ */
+Model.prototype.getData = function(req, callback) {
+  // const road;
+  // const side;
+  // const id = `${road}-${side}`;
+  //const id = req.params.id;
+  const road = req.params.id;
+  (async (dbConf, cb) => {
+    const db = await mongo.connect(dbConf.url, dbConf.dbname);
+    const geojson = await mongo.query(db, dbConf.opts).catch((err) => {
+      console.error(err);
+    });
+    cb(null, geojson);
+  })({
+    url: config.mongodb,
+    dbname: config.mongodb.databasename,
+    opts: {
+      collectionName: config.mongodb.collectionname,
+      queryObj: {
+        // INTRODUCE YOUR query
+      }
+    }
+  }, callback);
+}
+
+
+
+module.exports = Model
