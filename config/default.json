@@ -1,7 +1,7 @@
 {
   "mongodb": {
-    "url": "",
-    "databasename": "",
-    "collectionname": ""
+    "url": "mongodb://localhost:27017",
+    "databasename": "koop",
+    "collectionname": "cameras"
   }
 }

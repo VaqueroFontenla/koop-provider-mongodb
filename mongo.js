@@ -31,7 +31,14 @@ function query(dbCon, optsObj) {
     collection
       .find(optsObj.queryObj)
       .project({
-   //Fields to return
+        "lng": 1,
+        "lat": 1,
+        "PK": 1,
+        "alias": 1,
+        "carretera": 1,
+        "codEle": 1,
+        "estado": 1,
+        "sentido": 1
       })
       .toArray(function(err, docs) {
         console.log("Found the following records");
@@ -61,13 +68,11 @@ function fromArrayToGeoJSON(arr) {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates":
+        "coordinates": [parseFloat(el.lng), parseFloat(el.lat)]
          //Array coordinates to json
 
       },
-      "properties": {
-       //Items Popup
-      }
+      "properties": el
     })
   });
   return geoJSON;
