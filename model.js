@@ -25,10 +25,9 @@ function Model() {}
 
 Model.prototype.getData = function(req, callback) {
   //Configure :id paremeter
-  const road = req.params.id;
   const queryEmpty = isEmpty(req.query);
   var queryObj= {
-    'carretera': road.toUpperCase(),
+    //Especifies request parameter (:id)
   }
   if (!queryEmpty) {
     queryObj=Object.assign(queryObj, req.query)

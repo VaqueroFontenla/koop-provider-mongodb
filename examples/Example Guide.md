@@ -48,19 +48,70 @@
     - `collectionname`: Collection name,
     - `url`: MongoDB connection string,
 
-
- 1. Koop exposes an Express server at koop.server which can be instructed to  listen on port 80
+ 1. Open `model.js` and configure :id parameter into getData:
 
     ```js
-    var koop = require('koop')(config);
+    const road = req.params.id;
+
+    var queryObj= {
+      'carretera': road.toUpperCase(),
+    }
+    ```
+
+ 1. Open `mongo.js` and specifies the fields to return
+
+    ```js
+    ...
+
+    .project({
+      "lng": 1,
+      "lat": 1,
+      "PK": 1,
+      "alias": 1,
+      "carretera": 1,
+      "codEle": 1,
+      "estado": 1,
+      "sentido": 1
+    })
+    ...
+
+    ```
+ 1. Configure JSON (coordinates and PopUp):
+
+    ```js
+     function fromArrayToGeoJSON()
+     ...
+
+     "coordinates": [el.lng,
+       el.lat
+     ]
+   },
+   "properties": {
+     'PK': el.PK,
+     'alias': el.alias,
+     'carretera': el.carretera,
+     'codEle': el.codEle,
+     'estado': el.estado,
+     'sentido': el.sentido,
+     'tipo': el.tipo
+   }
+   ...
+   ```
+ 1. Create the field that will start a Koop instance and register the mondodb-provider.
+ Koop exposes an Express server at koop.server which can be instructed to  listen on port 80
+
+    ```js
+
+    const koop = require('config');
+    const koop = require('koop')(config);
+
     const FeatureServer = require('koop-output-geoservices')
     const Provider = require('koop-provider-mongodb')
 
     koop.register(Provider);
     koop.register(FeatureServer);
 
-   koop.server.listen(80);
+    koop.server.listen(80);
     ```
-1. Build your **query**:
-1. Specify the fields to return after query filter
-1.  
+
+1. Enjoy!
