@@ -1,20 +1,21 @@
 {
   "name": "koop-provider-mongodb",
   "version": "1.0.0",
-  "description": "A mongodb provider for koop",
+  "description": "Track desarrolladores conferencia Esri 2018",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "koop",
     "mongo",
-    "providers",
+    "providers"
   ],
   "author": "Loreto Vaquero Fontenla",
   "license": "MIT",
   "dependencies": {
-    "koop": "^3.9.4",
-    "mongodb": "^3.1.6"
+    "config": "^2.0.1",
+    "koop": "^3.10.0",
+    "mongodb": "^3.1.8"
   }
 }

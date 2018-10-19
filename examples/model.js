@@ -24,7 +24,6 @@ function Model() {}
 
 
 Model.prototype.getData = function(req, callback) {
-  //Configure :id paremeter
   const road = req.params.id;
   const queryEmpty = isEmpty(req.query);
   var queryObj= {
@@ -33,7 +32,7 @@ Model.prototype.getData = function(req, callback) {
   if (!queryEmpty) {
     queryObj=Object.assign(queryObj, req.query)
   }
-
+  //const road = req.params.id;
   (async (dbConf, cb) => {
     const db = await mongo.connect(dbConf.url, dbConf.dbname);
     const geojson = await mongo.query(db, dbConf.opts).catch((err) => {

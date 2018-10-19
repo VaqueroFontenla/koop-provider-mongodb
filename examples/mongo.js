@@ -14,7 +14,7 @@ function _getDbConnection(c, database) {
 
 function _getClient(url) {
   return new Promise(function(resolve, reject) {
-    //TODO try catch to capture runtime errors
+    // TODO try catch to capture runtime errors
     MongoClient.connect(url, function(err, client) {
       if (err) {
         reject(err);
@@ -31,7 +31,14 @@ function query(dbCon, optsObj) {
     collection
       .find(optsObj.queryObj)
       .project({
-   //Fields to return
+        "lng": 1,
+        "lat": 1,
+        "PK": 1,
+        "alias": 1,
+        "carretera": 1,
+        "codEle": 1,
+        "estado": 1,
+        "sentido": 1
       })
       .toArray(function(err, docs) {
         console.log("Found the following records");
@@ -61,12 +68,18 @@ function fromArrayToGeoJSON(arr) {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates":
-         //Array coordinates to json
-
+        "coordinates": [el.lng,
+          el.lat
+        ]
       },
       "properties": {
-       //Items Popup
+        'PK': el.PK,
+        'alias': el.alias,
+        'carretera': el.carretera,
+        'codEle': el.codEle,
+        'estado': el.estado,
+        'sentido': el.sentido,
+        'tipo': el.tipo
       }
     })
   });
