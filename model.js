@@ -26,13 +26,14 @@ function Model() {}
 Model.prototype.getData = function(req, callback) {
   //Configure :id paremeter
   const queryEmpty = isEmpty(req.query);
-  var queryObj= {
-    //Especifies request parameter (:id)
-  }
+  var queryObj= {};
+
+  // Assign field_id specified in config to query
+  queryObj[config.mongodb.field_id] = req.params.id.toUpperCase();
   if (!queryEmpty) {
     queryObj=Object.assign(queryObj, req.query)
   }
-
+  //const road = req.params.id;
   (async (dbConf, cb) => {
     const db = await mongo.connect(dbConf.url, dbConf.dbname);
     const geojson = await mongo.query(db, dbConf.opts).catch((err) => {

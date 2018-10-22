@@ -1,7 +1,7 @@
 {
   "name": "koop-provider-mongodb",
   "version": "1.0.0",
-  "description": "Track desarrolladores conferencia Esri 2018",
+  "description": "A mongodb provider for koop",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,6 +16,7 @@
   "dependencies": {
     "config": "^2.0.1",
     "koop": "^3.10.0",
+    "link": "^0.1.5",
     "mongodb": "^3.1.8"
   }
 }

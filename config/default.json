@@ -1,7 +1,0 @@
-{
-  "mongodb": {
-    "url": "",
-    "databasename": "",
-    "collectionname": ""
-  }
-}

@@ -13,32 +13,83 @@ To install/use this provider you first need a working installation of [Koop](htt
 
 ## Getting started
 
-1. Install dependencies
+1. Create a directory:
 ```sh
-$ npm install koop-provider-mongodb
+$ cd ~/Desktop
+$ mkdir my_project
+$ cd my_project
 ```
-1. Open `config/default.json` with any configurable parameters.
+1. To execute in the project:
+```sh
+$ npm init -y
+```
+*npm init -y: generate the package.json file with default options (without asking any questions)*
 
-1. Open `model.js` and configure `:id` parameter into `getData function` to call the provider and return GeoJSON.
+1. Create `server.js` and add content:
 
-1. Open `mongo.js` and specifies the fields to return in the documents that match the query filter into `query function`.
-1. Open `mongo.js` and specifies coordinates (latitude, longitude)
+  ```sh
+  $ touch server.js
+  ```
 
-1. Create the `field.js` that will start a Koop instance and register the mondodb-provider.
-This `field.js` contains:
+  ```js
+  const config = require('config')
+  const Koop = require('koop');
+
+  const koop = new Koop(config);
+  const FeatureServer = require('koop-output-geoservices')
+  const Provider = require('koop-provider-mongodb')
+
+  koop.register(Provider);
+  koop.register(FeatureServer);
+
+  const PORT = 8080
+  // In Local Development, be aware that port has to be greater than 1024   ( Unpriviledge port)
+  koop.server.listen(PORT);
+
+  ```
+
+1. Create configuration:
+
+ ```sh
+$ mkdir config
+$ cd config
+$ touch default.json
+```
+
+1. Fill default.json with proper data
  ```js
- const config = require('config')
- const koop = require('koop')(config);
- const FeatureServer = require('koop-output-geoservices')
- const Provider = require('koop-provider-mongodb')
+{
+  "mongodb": {
+    "url": MongoDB connection string,
+    "databasename": Database name,
+    "collectionname": Collection name,
+    "field_id": MongoDB connection string,
+    "latitude": Latitude field database,
+    "longitude":Longitude field database,
+    "projectObj":fields to return in the documents that match the query filter.
+    }
+}
+```
 
- koop.register(Provider);
- koop.register(FeatureServer);
+1. Install dependencies:
 
- koop.server.listen(80);
- ```
+  ```sh
+  $ npm i koop
+  $ npm i koop-output-geoservices
+  $ npm i koop-provider-mongodb
+  ```
 
-1. Run a local server `npm start`.
+1. Start
+
+  ```sh
+  node server.js
+  ```
+1. If you need to debug it
+
+  ```sh
+  node --inspect-brk server.js
+  ```
+![node_inspect](images/node_insp.png)
 
 ## Usage
 
@@ -51,3 +102,7 @@ $ curl http://localhost:8080/mongodb/:id/FeatureServer0/query
 ```
 
 Any query-parameters added to the request URL can accessed within getData and leveraged for data fetching purposes.
+
+## Example
+
+If you need to check some example, you can visit the [repository](https://github.com/VaqueroFontenla/koop-provider-mongodb.git)

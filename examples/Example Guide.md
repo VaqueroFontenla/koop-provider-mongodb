@@ -1,6 +1,9 @@
 # Example Guide
 
-## Creating a koop provider
+This is a use case for the koop-provider-mongodb.
+The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
+
+## Check koop-provider-mongodb
 
 1. **Create Node.js project**:
  1. Create a directory:
@@ -11,9 +14,10 @@
  ```sh
  $ npm init –y
  ```
-**npm init -y**: generate the package.json file with default options (without asking any questions)
+*npm init -y: generate the package.json file with default options (without asking any questions)*
 
-1. **Install mongodb**:
+
+2. **Install mongodb**:
 
   We install the mongodb driver and it's dependencies by executing the following `npm` command.
   ```sh
@@ -41,77 +45,78 @@
 
   This is a visual manager of non-relational databases with MongoDB, in which we will be able to manipulate all our collections and documents.
 
-4. **Create Koop Provider**
- 1. Open `config/default.json` with any configurable parameters:
-
-    - `databasename`: Database name,
-    - `collectionname`: Collection name,
-    - `url`: MongoDB connection string,
-
- 1. Open `model.js` and configure :id parameter into getData:
+4. **Check koop-provider-mongodb**
+ 1. Create `server.js` and add content
+ ```sh
+ $ touch server.js
+ ```
 
     ```js
-    const road = req.params.id;
+    const config = require('config')
+    const Koop = require('koop');
 
-    var queryObj= {
-      'carretera': road.toUpperCase(),
-    }
-    ```
-
- 1. Open `mongo.js` and specifies the fields to return
-
-    ```js
-    ...
-
-    .project({
-      "lng": 1,
-      "lat": 1,
-      "PK": 1,
-      "alias": 1,
-      "carretera": 1,
-      "codEle": 1,
-      "estado": 1,
-      "sentido": 1
-    })
-    ...
-
-    ```
- 1. Configure JSON (coordinates and PopUp):
-
-    ```js
-     function fromArrayToGeoJSON()
-     ...
-
-     "coordinates": [el.lng,
-       el.lat
-     ]
-   },
-   "properties": {
-     'PK': el.PK,
-     'alias': el.alias,
-     'carretera': el.carretera,
-     'codEle': el.codEle,
-     'estado': el.estado,
-     'sentido': el.sentido,
-     'tipo': el.tipo
-   }
-   ...
-   ```
- 1. Create the field that will start a Koop instance and register the mondodb-provider.
- Koop exposes an Express server at koop.server which can be instructed to  listen on port 80
-
-    ```js
-
-    const koop = require('config');
-    const koop = require('koop')(config);
-
+    const koop = new Koop(config);
     const FeatureServer = require('koop-output-geoservices')
     const Provider = require('koop-provider-mongodb')
 
     koop.register(Provider);
     koop.register(FeatureServer);
 
-    koop.server.listen(80);
-    ```
+    const PORT = 8080
+    // In Local Development, be aware that port has to be greater than    1024   ( Unpriviledge port)
+    koop.server.listen(PORT);
 
-1. Enjoy!
+    ```
+  1. Create configuration:
+
+     ```sh
+    $ mkdir config
+    $ cd config
+    $ touch default.json
+    ```
+  1. Fill default.json with proper data
+
+     ```js
+     {
+       "mongodb": {
+         "url": "mongodb://localhost:27017",
+         "databasename": "koop",
+         "collectionname": "cameras",
+         "field_id":"carretera",
+         "latitude": "lat",
+         "longitude": "lng",
+         "projectObj":{
+           "lng": 1,
+           "lat": 1,
+           "PK": 1,
+           "alias": 1,
+           "carretera": 1,
+           "codEle": 1,
+           "estado": 1,
+           "sentido": 1
+         }
+       }
+  }
+ ```
+  1. Install dependencies:
+
+      ```sh
+      $ npm i koop
+      $ npm i koop-output-geoservices
+      $ npm i koop-provider-mongodb
+      ```
+
+  1. Start
+
+      ```sh
+      node server.js
+      ```
+
+1. In your browser:
+```sh
+$ curl http://localhost:8080/mongodb/AP-9/FeatureServer0/query
+```
+Example API Query:
+```sh
+$ curl http://localhost:8080/mongodb/AP-9/FeatureServer0/query?sentido=CRE
+```

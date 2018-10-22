@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+const config = require('config');
 
 function connect(mongourl, dbName) {
   return _getClient(mongourl)
@@ -14,7 +15,7 @@ function _getDbConnection(c, database) {
 
 function _getClient(url) {
   return new Promise(function(resolve, reject) {
-    //TODO try catch to capture runtime errors
+    // TODO try catch to capture runtime errors
     MongoClient.connect(url, function(err, client) {
       if (err) {
         reject(err);
@@ -30,9 +31,7 @@ function query(dbCon, optsObj) {
   return new Promise(function(resolve, reject) {
     collection
       .find(optsObj.queryObj)
-      .project({
-   //Fields to return
-      })
+      .project(config.mongodb.projectObj)
       .toArray(function(err, docs) {
         console.log("Found the following records");
         //console.log(docs)
@@ -61,13 +60,10 @@ function fromArrayToGeoJSON(arr) {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates":
-         //Array coordinates to json
-
+        "coordinates": [parseFloat(el.config.mongodb.longitude), parseFloat(el.config.mongodb.latitude)]
+        ]
       },
-      "properties": {
-       //Items Popup
-      }
+      "properties": el
     })
   });
   return geoJSON;
