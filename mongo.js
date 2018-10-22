@@ -61,7 +61,7 @@ function fromArrayToGeoJSON(arr) {
       "geometry": {
         "type": "Point",
         "coordinates": [parseFloat(el[config.mongodb.longitude]), parseFloat(el[config.mongodb.latitude])]
-      }
+      },
       "properties": el
     })
   });
