@@ -30,6 +30,7 @@ Model.prototype.getData = function(req, callback) {
 
   // Assign field_id specified in config to query
   queryObj[config.mongodb.field_id] = req.params.id.toUpperCase();
+
   if (!queryEmpty) {
     queryObj=Object.assign(queryObj, req.query)
   }
