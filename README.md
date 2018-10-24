@@ -98,7 +98,7 @@ By default, Koop will start listening on http://localhost:8080.
 You can issue a request by using:
 
 ```sh
-$ curl http://localhost:8080/mongodb/:id/FeatureServer0/query
+$ curl http://localhost:8080/mongodb/:id/FeatureServer
 ```
 
 Any query-parameters added to the request URL can accessed within getData and leveraged for data fetching purposes.

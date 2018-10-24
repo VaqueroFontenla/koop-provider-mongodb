@@ -108,7 +108,7 @@ The [data](data/cameras.csv) source is a list of Spanish road traffic cameras.
 
 1. In your browser:
 ```sh
-$ curl http://localhost:8080/mongodb/AP-9/FeatureServer0/query
+$ curl http://localhost:8080/mongodb/AP-9/FeatureServer
 ```
 
 1. Expose a local web server to the internet:
