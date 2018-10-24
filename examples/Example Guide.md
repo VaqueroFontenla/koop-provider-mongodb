@@ -1,7 +1,7 @@
 # Example Guide
 
 This is a use case for the koop-provider-mongodb.
-The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
+The [data](data/cameras.csv) source is a list of Spanish road traffic cameras.
 
 ## Check koop-provider-mongodb
 
@@ -17,25 +17,22 @@ The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
 *npm init -y: generate the package.json file with default options (without asking any questions)*
 
 
-2. **Install mongodb**:
-
-  We install the mongodb driver and it's dependencies by executing the following `npm` command.
+2. **Mongodb**:
+ 1. Run mongodb
   ```sh
-  $ npm install mongodb --save
+  $ mongod
   ```
-  This will download the MongoDB driver and add a dependency entry in your `package.json` file.
+  1. Import the data to MongoDB server.
 
-1. **Import the data to MongoDB server**
-
-  To execute in the project:
+     To execute in the project:
   ```sh
   $ mongoimport.exe -d koop -c cameras --type csv --file cameras.csv --headerline
   ```
-  - `d`: Specifies the name of the database on which to run the mongoimport
-  - `c`: Specifies the collection to import
-  - `type`: Specifies the file type to import. The default format is JSON, but in this case, we're going to to import csv files.
-  - `field`: field name.
-  - `heardline`:uses the first line as field names
+    - `d`: Specifies the name of the database on which to run the   mongoimport
+    - `c`: Specifies the collection to import
+    - `type`: Specifies the file type to import. The default format is   JSON, but in this case, we're going to to import csv files.
+    - `field`: field name.
+    - `heardline`:uses the first line as field names
 
   The project is in the local computer, that is, it is in "localhost".
   The port that is listening is the default port of the MongoDB installation.
@@ -52,20 +49,19 @@ The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
  ```
 
     ```js
+    process.on('SIGINT', () => process.exit(0))
+    process.on('SIGTERM', () => process.exit(0))
+
+    const Koop = require('koop')
+    const koop = new Koop()
+
     const config = require('config')
-    const Koop = require('koop');
 
-    const koop = new Koop(config);
-    const FeatureServer = require('koop-output-geoservices')
-    const Provider = require('koop-provider-mongodb')
-
-    koop.register(Provider);
-    koop.register(FeatureServer);
+    const provider = require('./index.js')
+    koop.register(provider)
 
     const PORT = 8080
-    // In Local Development, be aware that port has to be greater than    1024   ( Unpriviledge port)
     koop.server.listen(PORT);
-
     ```
   1. Create configuration:
 
@@ -101,8 +97,7 @@ The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
   1. Install dependencies:
 
       ```sh
-      $ npm i koop
-      $ npm i koop-output-geoservices
+      $ npm i koop@3.9.4
       $ npm i koop-provider-mongodb
       ```
 
@@ -116,7 +111,26 @@ The [data](data/cameras.csv) source is a list of Spanish road traffic cameras
 ```sh
 $ curl http://localhost:8080/mongodb/AP-9/FeatureServer0/query
 ```
-Example API Query:
-```sh
-$ curl http://localhost:8080/mongodb/AP-9/FeatureServer0/query?sentido=CRE
-```
+
+1. Expose a local web server to the internet:
+ 1.  ngrok console UI
+ ```sh
+ $ ngrok http 8080
+ ```
+
+ 1. Select https://
+ ![ngrok](../images/ngrok.png)
+
+1. In ArcGIS Online:
+   1. Log in
+   1. Content > Add Item > From The Web
+
+    ![login_agol](../images/login_agol.png)
+
+   1. Select **ArcGIS Server web service** and introduce the **url** of the service.
+   The **url** will be, the random url from ngrok plus service name from koop provider.
+   Add title and tags
+
+    ![add_item](../images/add_item.png)
+
+  1. Check: Open in Map Viewer
