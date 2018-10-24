@@ -33,19 +33,18 @@ $ npm init -y
 
   ```js
 
-  process.on('SIGINT', () => process.exit(0))
-  process.on('SIGTERM', () => process.exit(0))
-
-  const Koop = require('koop')
-  const koop = new Koop()
-
   const config = require('config')
+  const Koop = require('koop');
 
-  const provider = require('./index.js')
-  koop.register(provider)
+  const koop = new Koop(config);
+  const FeatureServer = require('koop-output-geoservices')
+  const Provider = require('koop-provider-mongodb')
 
-  const PORT = 8080
-  koop.server.listen(PORT);
+  koop.register(Provider);
+  koop.register(FeatureServer);
+
+  // In Local Development, be aware that port has to be greater than 1024 ( Unpriviledge port)
+  koop.server.listen(8080);
 
   ```
 
