@@ -1,0 +1,21 @@
+{
+  "name": "cesri",
+  "version": "1.0.0",
+  "description": "Track desarrolladores conferencia Esri 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "koop",
+    "mongo",
+    "providers",
+    "docker"
+  ],
+  "author": "Loreto VAquero Fontenla",
+  "license": "MIT",
+  "dependencies": {
+    "koop": "^3.9.4",
+    "mongodb": "^3.1.6"
+  }
+}
