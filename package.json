@@ -1,7 +1,7 @@
 {
   "name": "koop-provider-mongodb",
   "version": "1.0.0",
-  "description": "A mongodb provider for koop",
+  "description": "A koop provider for mongodb",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,14 +9,15 @@
   "keywords": [
     "koop",
     "mongo",
-    "providers"
+    "providers",
+    "docker"
   ],
   "author": "Loreto Vaquero Fontenla",
   "license": "MIT",
   "dependencies": {
-    "config": "^2.0.1",
-    "koop": "^3.10.0",
-    "link": "^0.1.5",
-    "mongodb": "^3.1.8"
+    "csv-stream": "^0.2.0",
+    "jsonfile": "^5.0.0",
+    "koop": "^3.9.4",
+    "mongodb": "^3.1.6"
   }
 }

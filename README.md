@@ -32,18 +32,19 @@ $ npm init -y
   ```
 
   ```js
+
+  process.on('SIGINT', () => process.exit(0))
+  process.on('SIGTERM', () => process.exit(0))
+
+  const Koop = require('koop')
+  const koop = new Koop()
+
   const config = require('config')
-  const Koop = require('koop');
 
-  const koop = new Koop(config);
-  const FeatureServer = require('koop-output-geoservices')
-  const Provider = require('koop-provider-mongodb')
-
-  koop.register(Provider);
-  koop.register(FeatureServer);
+  const provider = require('./index.js')
+  koop.register(provider)
 
   const PORT = 8080
-  // In Local Development, be aware that port has to be greater than 1024   ( Unpriviledge port)
   koop.server.listen(PORT);
 
   ```
@@ -63,7 +64,7 @@ $ touch default.json
     "url": MongoDB connection string,
     "databasename": Database name,
     "collectionname": Collection name,
-    "field_id": MongoDB connection string,
+    "field_id": Request field (:id),
     "latitude": Latitude field database,
     "longitude":Longitude field database,
     "projectObj":fields to return in the documents that match the query filter.
@@ -72,10 +73,10 @@ $ touch default.json
 ```
 
 1. Install dependencies:
+You must install the same version of `koop` as the `provider`.
 
   ```sh
-  $ npm i koop
-  $ npm i koop-output-geoservices
+  $ npm i koop@3.9.4
   $ npm i koop-provider-mongodb
   ```
 
@@ -106,3 +107,8 @@ Any query-parameters added to the request URL can accessed within getData and le
 ## Example
 
 If you need to check some example, you can visit the [repository](https://github.com/VaqueroFontenla/koop-provider-mongodb.git)
+
+## Resources
+- http://koopjs.github.io/
+- https://github.com/koopjs/koop-provider-file-geojson
+- https://github.com/koopjs/koop-provider-sample.git

@@ -6,9 +6,6 @@
 const mongo = require('./mongo.js');
 const config = require('config');
 
-function isEmpty(obj) {
- return !obj || Object.keys(obj).length === 0;
-}
 
 /**
  * Model constructor
@@ -21,34 +18,24 @@ function Model() {}
  * @param {object} express request object
  * @param {function} callback
  */
-
-
 Model.prototype.getData = function(req, callback) {
-  //Configure :id paremeter
-  const queryEmpty = isEmpty(req.query);
-  var queryObj= {};
-
-  // Assign field_id specified in config to query
-  queryObj[config.mongodb.field_id] = req.params.id.toUpperCase();
-
-  if (!queryEmpty) {
-    queryObj=Object.assign(queryObj, req.query)
-  }
-  //const road = req.params.id;
+  const idQuery = req.params.id.toUpperCase();
   (async (dbConf, cb) => {
-    const db = await mongo.connect(dbConf.url, dbConf.dbname);
-    const geojson = await mongo.query(db, dbConf.opts).catch((err) => {
+    const db = await mongo.connect(dbConf.url,dbConf.dbname);
+    const geojson = await mongo.query(db,dbConf.opts).catch((err) => {
       console.error(err);
     });
-    cb(null, geojson);
+    cb(null,geojson);
   })({
-    url: config.mongodb.url,
-    dbname: config.mongodb.databasename,
-    opts: {
-      collectionName: config.mongodb.collectionname,
-      queryObj
-    }
-  }, callback);
+    url : config.mongodb.url,
+      dbname: config.mongodb.databasename,
+      opts: {
+        collectionName: config.mongodb.collectionname,
+        queryObj: {
+          [config.mongodb.field_id]: idQuery
+        }
+      }
+    }, callback);
 }
 
 

@@ -1,23 +1,23 @@
 const MongoClient = require('mongodb').MongoClient;
 const config = require('config');
 
-function connect(mongourl, dbName) {
+function connect (mongourl,dbName) {
   return _getClient(mongourl)
-    .then(client => _getDbConnection(client, dbName))
-    .then(db => db);
+            .then(client => _getDbConnection(client, dbName))
+            .then(db => db);
 }
 
-function _getDbConnection(c, database) {
-  return new Promise(function(resolve, reject) {
-    resolve(c.db(database));
-  });
+function _getDbConnection(c,database) {
+   return new Promise(function(resolve,reject) {
+     resolve(c.db(database));
+   });
 }
 
 function _getClient(url) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve,reject) {
     // TODO try catch to capture runtime errors
     MongoClient.connect(url, function(err, client) {
-      if (err) {
+      if(err) {
         reject(err);
       } else {
         resolve(client);
@@ -43,11 +43,6 @@ function query(dbCon, optsObj) {
       });
   });
 }
-const geoJSON = {
-  "type": "FeatureCollection",
-  "features": []
-};
-const geoJsonFeatures = geoJSON.features;
 
 function fromArrayToGeoJSON(arr) {
   const geoJSON = {
