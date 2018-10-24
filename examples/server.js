@@ -1,12 +1,19 @@
+// clean shutdown on `cntrl + c`
+process.on('SIGINT', () => process.exit(0))
+process.on('SIGTERM', () => process.exit(0))
+
+// Initialize Koop
+const Koop = require('koop')
+const koop = new Koop()
+// var tiles = require('@koopjs/output-vector-tiles')
+// koop.register(tiles)
+
 const config = require('config')
-const Koop = require('koop');
 
-const koop = new Koop(config);
-const FeatureServer = require('koop-output-geoservices')
-const Provider = require('koop-provider-mongodb')
+// Install the provider and apply authentication
+const provider = require('./index.js')
+koop.register(provider)
 
-koop.register(Provider);
-koop.register(FeatureServer);
-
-
-koop.server.listen(8000);
+const PORT = 8080
+// In Local Development, be aware that port has to be greater than 1024   ( Unpriviledge port)
+koop.server.listen(PORT);
